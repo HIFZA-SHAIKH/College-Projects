@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome to the Dashboard</h2>
+    <p>Hello, {{ user.username }}! You are logged in as <strong>{{ user.role }}</strong>.</p>
+
+    <div class="row">
+        {% if user.role == "admin" %}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">Raw Materials</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><a href="{% url 'raw_material_list' %}" class="btn btn-outline-primary btn-sm">View Raw Materials</a></li>
+                            <li><a href="{% url 'add_raw_material' %}" class="btn btn-outline-success btn-sm">Add Raw Material</a></li>
+                            <li><a href="{% url 'stock_alerts' %}" class="btn btn-outline-success btn-sm">View Stock Alert</a></li>
+                            <li><a href="{% url 'add_supplier' %}" class="btn btn-outline-danger btn-sm">Add supplier</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.role == "production" %}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-warning text-white">Update Raw Materials</div>
+            <div class="card-body">
+                <a href="{% url 'update_raw_material_stock' material.id %}">Update Stock</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-danger text-white">Stock Alerts</div>
+            <div class="card-body">
+                <a href="{% url 'stock_alerts' %}" class="btn btn-outline-danger btn-sm">View Alerts</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+        {% if user.role == "sales" %}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">Stock Alerts</div>
+            <div class="card-body">
+                <a href="{% url 'stock_alerts' %}" class="btn btn-outline-danger btn-sm">View Alerts</a>
+            </div>
+            <div class="card-header bg-danger text-white">Update Finished Products</div>
+            <div class="card-body">
+                <a href="{% url 'update_finished_goods_stock' %}" class="btn btn-outline-danger btn-sm">Update product</a>
+            </div>
+           
+                </div>
+                
+            </div>
+
+           
+        {% endif %}
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'juice_app/base.html' %}
+{% block content %}
+<h2>Juice Products</h2>
+
+<!-- Form for Adding Products -->
+<form method="POST" class="mb-4">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-3">{{ form.name.label_tag }} {{ form.name }}</div>
+        <div class="col-md-3">{{ form.category.label_tag }} {{ form.category }}</div>
+        <div class="col-md-3">{{ form.price.label_tag }} {{ form.price }}</div>
+        <div class="col-md-3"><br><button type="submit" class="btn btn-primary">Add Product</button></div>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <tr><th>Name</th><th>Category</th><th>Price</th></tr>
+    {% for product in products %}
+    <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category }}</td>
+        <td>₹{{ product.price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

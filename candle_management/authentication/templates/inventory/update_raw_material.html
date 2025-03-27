@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Update Raw Material Stock</h2>
+<form method="POST" action="{% url 'update_raw_material_stock' material.id %}">
+    {% csrf_token %}
+    <label>Used Quantity:</label>
+    <input type="number" name="used_quantity" required>
+    <button type="submit">Update</button>
+</form>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,12 @@
+<h2>My Bookings</h2>
+<table>
+    <tr><th>Court</th><th>Date</th><th>Time</th><th>Status</th></tr>
+    {% for booking in bookings %}
+    <tr>
+        <td>{{ booking.court.name }}</td>
+        <td>{{ booking.booking_date }}</td>
+        <td>{{ booking.start_time }} - {{ booking.end_time }}</td>
+        <td>{{ booking.status }}</td>
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,27 @@
+{% extends 'scheduler/base.html' %}
+
+{% block content %}
+<h2>Track Your Topics</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Add Topic</button>
+</form>
+
+<h3 class="mt-4">Your Topics</h3>
+<ul class="list-group">
+    {% for topic in topics %}
+    <li class="list-group-item d-flex justify-content-between">
+        {{ topic.name }} (Subject: {{ topic.subject.name }})
+        {% if topic.completed %}
+            <span class="badge bg-success">Completed</span>
+        {% else %}
+            <a href="#" class="btn btn-warning btn-sm">Mark as Done</a>
+        {% endif %}
+    </li>
+    {% empty %}
+    <li class="list-group-item">No topics added yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

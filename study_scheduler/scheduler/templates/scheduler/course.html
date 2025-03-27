@@ -1,0 +1,20 @@
+{% extends 'scheduler/base.html' %}
+
+{% block content %}
+<h2>Manage Courses</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Add Course</button>
+</form>
+
+<h3 class="mt-4">Your Courses</h3>
+<ul class="list-group">
+    {% for course in courses %}
+    <li class="list-group-item">{{ course.name }}</li>
+    {% empty %}
+    <li class="list-group-item">No courses added yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

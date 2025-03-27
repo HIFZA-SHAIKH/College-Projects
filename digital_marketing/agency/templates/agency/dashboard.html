@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+    {% include 'agency/navbar.html' %}
+
+    <div class="container my-5">
+        <h2 class="text-center">Admin Dashboard</h2>
+
+        <div class="card p-4 my-4">
+            <h3>Total Inquiries: {{ total_inquiries }}</h3>
+        </div>
+
+        <h4>Latest Inquiries</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inquiry in latest_inquiries %}
+                <tr>
+                    <td>{{ inquiry.name }}</td>
+                    <td>{{ inquiry.email }}</td>
+                    <td>{{ inquiry.subject }}</td>
+                    <td>{{ inquiry.message }}</td>
+                    <td>{{ inquiry.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include 'agency/footer.html' %}
+
+</body>
+</html>

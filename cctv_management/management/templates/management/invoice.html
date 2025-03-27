@@ -1,0 +1,17 @@
+<h2>Invoices</h2>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+
+<table border="1">
+    <tr>
+        <th>Customer</th>
+        <th>Sale Date</th>
+        <th>Invoice Date</th>
+    </tr>
+    {% for invoice in invoices %}
+    <tr>
+        <td>{{ invoice.sale.customer.name }}</td>
+        <td>{{ invoice.sale.sale_date }}</td>
+        <td>{{ invoice.invoice_date }}</td>
+    </tr>
+    {% endfor %}
+</table>

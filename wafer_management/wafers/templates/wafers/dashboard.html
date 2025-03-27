@@ -1,0 +1,141 @@
+{% extends 'wafers/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center text-primary">Dashboard</h2>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="alert alert-info text-center">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                <button class="btn btn-primary btn-lg btn-block" onclick="toggleForm('customerForm')">
+                    <i class="fas fa-user-plus"></i> Add Customer
+                </button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                <button class="btn btn-info btn-lg btn-block" onclick="toggleForm('categoryForm')">
+                    <i class="fas fa-list-alt"></i> Add Category
+                </button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                <button class="btn btn-success btn-lg btn-block" onclick="toggleForm('productForm')">
+                    <i class="fas fa-box"></i> Add Product
+                </button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                <button class="btn btn-warning btn-lg btn-block" onclick="toggleForm('orderForm')">
+                    <i class="fas fa-shopping-cart"></i> Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Sections -->
+    <div class="card p-4 shadow mt-3" id="customerForm" style="display: none;">
+        <h4 class="text-primary">Add Customer</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ customer_form.as_p }}
+            <button type="submit" name="add_customer" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div class="card p-4 shadow mt-3" id="categoryForm" style="display: none;">
+        <h4 class="text-info">Add Category</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ category_form.as_p }}
+            <button type="submit" name="add_category" class="btn btn-info">Submit</button>
+        </form>
+    </div>
+
+    <div class="card p-4 shadow mt-3" id="productForm" style="display: none;">
+        <h4 class="text-success">Add Product</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ product_form.as_p }}
+            <button type="submit" name="add_product" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+
+    <div class="card p-4 shadow mt-3" id="orderForm" style="display: none;">
+        <h4 class="text-warning">Place Order</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ order_form.as_p }}
+            <button type="submit" name="place_order" class="btn btn-warning">Submit</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <!-- Recent Orders Table -->
+    <h3 class="text-center text-dark">Recent Orders</h3>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered shadow">
+            <thead class="table-dark">
+                <tr>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="align-middle">
+                    <td>{{ order.customer.name }}</td>
+                    <td>{{ order.product.name }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>₹{{ order.total_price }}</td>
+                    <td>
+                        <form method="post" action="{% url 'update_order_status' order.id %}">
+                            {% csrf_token %}
+                            <select name="status" class="form-select">
+                                <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
+                                <option value="Processing" {% if order.status == "Processing" %}selected{% endif %}>Processing</option>
+                                <option value="Shipped" {% if order.status == "Shipped" %}selected{% endif %}>Shipped</option>
+                                <option value="Delivered" {% if order.status == "Delivered" %}selected{% endif %}>Delivered</option>
+                                <option value="Cancelled" {% if order.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                            </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- JavaScript for Form Toggle -->
+<script>
+    function toggleForm(formId) {
+        var forms = ['customerForm', 'productForm', 'categoryForm', 'orderForm'];
+        forms.forEach(id => {
+            document.getElementById(id).style.display = id === formId ? 'block' : 'none';
+        });
+    }
+</script>
+
+{% endblock %}

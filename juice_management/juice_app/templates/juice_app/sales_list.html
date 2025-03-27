@@ -1,0 +1,67 @@
+{% extends 'juice_app/base.html' %}
+{% block content %}
+<h2>Sales Management</h2>
+
+<!-- Form for Processing Sales -->
+<form method="POST" class="mb-4">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-5">
+            {{ form.product.label_tag }} {{ form.product }}
+        </div>
+        <div class="col-md-3">
+            {{ form.quantity.label_tag }} 
+            <input type="number" id="quantity" name="quantity" class="form-control" required>
+        </div>
+        <div class="col-md-2">
+            <br><button type="submit" class="btn btn-warning">Process Sale</button>
+        </div>
+    </div>
+</form>
+
+{% if error %}
+<p class="text-danger">{{ error }}</p>
+{% endif %}
+
+<!-- Sales Table -->
+<table class="table table-hover">
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price Per Unit</th>
+        <th>Total Price</th>
+        <th>Sale Date</th>
+    </tr>
+    {% for sale in sales %}
+    <tr>
+        <td>{{ sale.product.name }}</td>
+        <td>{{ sale.quantity }}</td>
+        <td>₹{{ sale.product.price }}</td>
+        <td>₹{{ sale.total_price }}</td>
+        <td>{{ sale.sale_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let productDropdown = document.querySelector("select[name='product']");
+    let quantityInput = document.querySelector("input[name='quantity']");
+    
+    productDropdown.addEventListener("change", updateTotal);
+    quantityInput.addEventListener("input", updateTotal);
+
+    function updateTotal() {
+        let selectedProduct = productDropdown.options[productDropdown.selectedIndex];
+        let price = selectedProduct.getAttribute("data-price");
+        let quantity = quantityInput.value || 0;
+        let totalPrice = price * quantity;
+        
+        document.getElementById("total_price").innerText = "Total Price: ₹" + totalPrice.toFixed(2);
+    }
+});
+</script>
+
+<p id="total_price" class="fw-bold"></p>
+
+{% endblock %}

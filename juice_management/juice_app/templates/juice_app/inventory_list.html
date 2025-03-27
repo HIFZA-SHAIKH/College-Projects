@@ -1,0 +1,24 @@
+{% extends 'juice_app/base.html' %}
+{% block content %}
+<h2>Inventory Management</h2>
+
+<!-- Form for Updating Inventory -->
+<form method="POST" class="mb-4">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6">{{ form.product.label_tag }} {{ form.product }}</div>
+        <div class="col-md-4">{{ form.stock_quantity.label_tag }} {{ form.stock_quantity }}</div>
+        <div class="col-md-2"><br><button type="submit" class="btn btn-success">Update Stock</button></div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <tr><th>Product</th><th>Stock Quantity</th></tr>
+    {% for item in inventory %}
+    <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.stock_quantity }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

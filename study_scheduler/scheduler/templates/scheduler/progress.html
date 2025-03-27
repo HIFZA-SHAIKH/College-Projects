@@ -1,0 +1,42 @@
+{% load static %}  
+
+{% block content %}
+<h2>Study Progress</h2>
+
+<canvas id="progressChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var progressData = JSON.parse('{{ progress|safe }}');  // Convert to JSON-safe format
+
+        var labels = progressData.map(entry => entry.date);
+        var dataValues = progressData.map(entry => entry.hours_studied);
+
+        var ctx = document.getElementById('progressChart').getContext('2d');
+        var progressChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Hours Studied',
+                    data: dataValues,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'scheduler/base.html' %}
+{% block content %}
+<h2>Select Course</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="course">Choose a Course:</label>
+    <select name="course" id="course">
+        {% for course in courses %}
+        <option value="{{ course.id }}">{{ course.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Next</button>
+</form>
+{% endblock %}

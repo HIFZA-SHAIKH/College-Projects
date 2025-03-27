@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Court{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-center text-success mb-4">Add Court</h2>
+
+    <form method="post" class="shadow p-4 rounded bg-light">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-success w-100">
+            ➕ Add Court
+        </button>
+    </form>
+
+    <!-- Back to Admin Dashboard Button -->
+    <div class="text-center mt-3">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+            🔙 Back to Admin Dashboard
+        </a>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 style="text-align: center; color: #4CAF50;">Welcome, {{ user.username }}!</h2>
+<p style="text-align: center; font-size: 1.2em;">Your role: <strong>{{ user.role }}</strong></p>
+
+<ul style="list-style-type: none; padding: 0; text-align: center;">
+    {% if user.role == 'admin' %}
+        <li style="margin: 10px 0;"><a href="{% url 'add_court' %}" style="text-decoration: none; color: #007BFF; font-weight: bold;">➕ Add Court</a></li>
+        <li style="margin: 10px 0;"><a href="{% url 'manage_bookings' %}" style="text-decoration: none; color: #007BFF; font-weight: bold;">📋 Manage Court Bookings</a></li>
+
+        <h3 style="text-align: center; margin-top: 20px; color: #333;">All Court Bookings</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px auto; text-align: center;">
+            <tr style="background-color: #f2f2f2;">
+                <th style="border: 1px solid #ddd; padding: 8px;">Player</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Court</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Date</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Time</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Status</th>
+            </tr>
+            {% for booking in all_bookings %}
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.user.username }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.court.name }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.booking_date }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.start_time }} - {{ booking.end_time }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.status }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5" style="border: 1px solid #ddd; padding: 8px;">No bookings available</td></tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+     {% if  user.role in 'player' or user.role in 'coach' %}
+         <li style="margin: 10px 0;"><a href="{% url 'book_court' %}" style="text-decoration: none; color: #007BFF; font-weight: bold;">🏸 Book a Court</a></li> 
+
+        <h3 style="text-align: center; margin-top: 20px; color: #333;">Your Court Bookings</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px auto; text-align: center;">
+            <tr style="background-color: #f2f2f2;">
+                <th style="border: 1px solid #ddd; padding: 8px;">Court</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Date</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Time</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Status</th>
+            </tr>
+            {% for booking in user_bookings %}
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.court.name }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.booking_date }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.start_time }} - {{ booking.end_time }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ booking.status }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4" style="border: 1px solid #ddd; padding: 8px;">No bookings yet</td></tr>
+            {% endfor %}
+        </table>
+    {% endif %} 
+</ul>
+
+<p style="text-align: center; margin-top: 20px;"><a href="{% url 'logout' %}" style="text-decoration: none; color: #FF0000; font-weight: bold;">🚪 Logout</a></p>
+{% if user.role == "admin" or user.role == "production" %}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-warning text-white">Production Management</div>
+            <div class="card-body">
+                <a href="{% url 'create_production_batch' %}" class="btn btn-primary btn-sm">Create Batch</a>
+                <a href="{% url 'production_reports' %}" class="btn btn-success btn-sm">View Reports</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

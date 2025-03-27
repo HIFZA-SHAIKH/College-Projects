@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Inventory System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow-lg">
+            <div class="card-header bg-dark text-white text-center">
+                <h4>Login</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100">Login</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small>Don't have an account? <a href="{% url 'register' %}">Sign Up</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

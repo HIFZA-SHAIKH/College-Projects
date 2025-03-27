@@ -1,0 +1,28 @@
+{% extends 'scheduler/base.html' %}
+
+{% block content %}
+<h2>Welcome, {{ user.username }}!</h2>
+<p>Select an option to manage your study schedule.</p>
+
+{% if user.is_staff %}
+    <!-- Admin Dashboard -->
+    <div class="list-group">
+        <h3>Admin Controls</h3>
+        <a href="{% url 'course' %}" class="list-group-item list-group-item-action">Add Course</a>
+        <a href="{% url 'subject' %}" class="list-group-item list-group-item-action">Add Subject</a>
+        <a href="{% url 'topic' %}" class="list-group-item list-group-item-action">Add Topic</a>
+        <a href="{% url 'add_user' %}" class="list-group-item list-group-item-action">Register New User</a>
+    </div>
+{% else %}
+    <!-- User Dashboard -->
+    <div class="list-group">
+        <h3>User Options</h3>
+        <a href="{% url 'select_course' %}" class="list-group-item list-group-item-action">Select Course</a>
+        <a href="{% url 'select_subject' %}" class="list-group-item list-group-item-action">Select Subject</a>
+        <a href="{% url 'select_topic' %}" class="list-group-item list-group-item-action">Choose Topic</a>
+        <a href="{% url 'add_study_time' %}" class="list-group-item list-group-item-action">Log Study Time</a>
+        <a href="{% url 'progress' %}" class="list-group-item list-group-item-action">View Study Progress</a>
+    </div>
+{% endif %}
+
+{% endblock %}
