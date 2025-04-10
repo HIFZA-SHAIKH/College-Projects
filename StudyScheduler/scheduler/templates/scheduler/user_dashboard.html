@@ -1,0 +1,108 @@
+<h2>User Dashboard</h2>
+
+<!-- Logout Button -->
+<a href="{% url 'logout' %}">Logout</a>
+
+<!-- Course Selection -->
+<h3>Select Course:</h3>
+<form method="GET" action="">
+    <select name="course_id" onchange="this.form.submit()">
+        <option value="">-- Select Course --</option>
+        {% for course in courses %}
+            <option value="{{ course.id }}" {% if selected_course_id|add:"0" == course.id %}selected{% endif %}>
+                {{ course.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<!-- Subject Selection -->
+{% if selected_course %}
+    <h3>Select Subject:</h3>
+    <form method="GET" action="">
+        <input type="hidden" name="course_id" value="{{ selected_course.id }}">
+        <select name="subject_id" onchange="this.form.submit()">
+            <option value="">-- Select Subject --</option>
+            {% for subject in subjects %}
+                <option value="{{ subject.id }}" {% if selected_subject_id|add:"0" == subject.id %}selected{% endif %}>
+                    {{ subject.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+{% endif %}
+
+<!-- Topic List -->
+{% if selected_subject %}
+    <h3>Topics for {{ selected_subject.name }}</h3>
+    <ul>
+        {% for topic in topics %}
+            <li>
+                <strong>{{ topic.name }}</strong><br>
+                
+                {% if topic.start_time %}
+                    📅 **Start Time:** {{ topic.start_time|date:"d M Y, H:i" }}<br>
+                {% endif %}
+                
+                {% if topic.end_time %}
+                    🏁 **End Time:** {{ topic.end_time|date:"d M Y, H:i" }}<br>
+                {% endif %}
+                
+                ⏳ **Hours Spent:** {{ topic.hours_spent }} hours<br>
+
+                {% if not topic.is_completed %}
+                    ✅ <a href="{% url 'mark_done' topic.id %}">Mark as Done</a>
+                {% else %}
+                    ✔ **Completed**
+                {% endif %}
+            </li>
+        {% empty %}
+            <p>No topics found for this subject.</p>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Please select a subject to view topics.</p>
+{% endif %}
+
+<!-- Chart Section -->
+<h3>Learning Progress Chart</h3>
+<canvas id="progressChart" width="400" height="200"></canvas>
+
+
+
+
+<!-- Load Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var ctx = document.getElementById('progressChart').getContext('2d');
+
+        // Serialize data from Django context into JSON
+        var topics = JSON.parse('{{ topics|safe|escapejs }}');
+
+        var labels = topics.map(topic => topic.name);
+        var data = topics.map(topic => topic.hours_spent);
+
+        var progressChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Hours Spent on Each Topic',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,9 @@
+
+    <h2>Add Timetable</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Timetable</button>
+    </form>
+    <a href="{% url 'admin_dashboard' %}">Back to Dashboard</a>
+
